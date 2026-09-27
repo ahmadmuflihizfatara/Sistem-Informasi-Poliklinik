@@ -1,35 +1,49 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
-// Route Halaman Utama
+/*
+|--------------------------------------------------------------------------
+| Web Routes - SI-Poliklinik
+|--------------------------------------------------------------------------
+*/
+
+// Route Halaman Utama -> arahkan ke login
 Route::get('/', function () {
-    return view('login');
+    return redirect()->route('login');
 });
 
-// Route Auth & Profile
+// ===== Route Auth =====
 Route::get('/login', function () {
-    return view('login');
+    return view('auth.login');
 })->name('login');
 
+Route::post('/login', function (Request $request) {
+    // TODO: ganti dengan logic autentikasi asli (Auth::attempt, dsb.)
+    return redirect()->route('dashboard');
+});
+
 Route::get('/lupa-password', function () {
-    return view('lupa-password');
+    return view('auth.lupa-password');
 })->name('password.request');
 
+Route::post('/lupa-password', function (Request $request) {
+    // TODO: ganti dengan logic update password asli
+    return redirect()->route('login')->with('status', 'Kata sandi berhasil diperbarui.');
+})->name('password.update');
+
+Route::post('/logout', function (Request $request) {
+    // TODO: ganti dengan logic logout asli (Auth::logout(), session invalidate, dsb.)
+    return redirect()->route('login');
+})->name('logout');
+
+// ===== Route Dashboard & Profile =====
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-// Route Logout (Mengarahkan kembali ke Login)
-Route::any('/logout', function () {
-    return redirect('/login');
-})->name('logout');
-
-// Route Fitur & Navigasi Dashboard
 Route::get('/laporan-kesehatan', function () {
-    return view('dashboard');
+    // Sesuaikan dengan view laporan kesehatan yang sudah kamu buat
+    return view('laporan-kesehatan.index');
 })->name('laporan-kesehatan.index');
-
-Route::get('/password-update', function () {
-    return redirect('/login');
-})->name('password.update');
